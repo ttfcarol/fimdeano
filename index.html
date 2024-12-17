@@ -28,8 +28,9 @@
       background-position: center;
       background-attachment: fixed;
       padding: 10px;
-      position: relative; /* Necessário para o ::after */
+      position: relative;
     }
+
     body::after {
       content: "";
       position: absolute;
@@ -37,9 +38,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5); /* Cor de sobreposição e opacidade */
-      z-index: -1; /* Coloca a camada atrás do conteúdo */
-}
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
 
     /* Main Container */
     .postcard {
@@ -175,6 +176,16 @@
         max-width: 100px;
       }
     }
+
+    /* Employee Photos */
+    .employee-photo {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border: 2px solid #d7263d;
+      margin-top: 15px;
+    }
   </style>
 </head>
 <body>
@@ -190,16 +201,14 @@
     <div id="card-content" style="display: none;">
       <h1>Que esse fim de ano traga paz, gratidão e novos começos!</h1>
       <p class="message">Que a magia do Natal encha seu coração de amor, alegria e esperança!</p>
-      
 
-      <!-- QR Code -->
-      <a href="https://www.seusite.com" target="_blank">
-        <img src="logo.png" alt="QR Code" class="qrcode">
-      </a>
+      <!-- Employee Photo -->
+      <img id="employee-photo" src="" alt="Employee Photo" class="employee-photo">
 
+    
       <!-- Footer -->
       <div class="to-from">
-        <p id="from-name"><strong>De:</strong></p>
+        <p id="from-name"><strong>Para:</strong></p>
         <p id="to-name"><strong>De:</strong> TTF Alimentos</p>
       </div>
     </div>
@@ -207,36 +216,44 @@
 
   <script>
     const messages = {
-      "Solange": "Solange, sua visão, dedicação e liderança foram pilares fundamentais para o sucesso que alcançamos este ano. Não há palavras suficientes para agradecer pela inspiração e esforço que você sempre coloca em tudo o que faz. O sucesso do nosso time é, sem dúvida, um reflexo da sua paixão e compromisso. Em 2025, a palavra Transformação será sua guia. Que você continue a nos inspirar a quebrar barreiras e a transformar desafios em grandes conquistas!",
-      "Vanderlei": "Vanderlei, sua habilidade de liderar com equilíbrio, sabedoria e empatia fez toda a diferença em nosso ano. Você não apenas orientou o time com excelência, mas também foi o grande responsável pelo clima positivo e pela motivação constante que vivemos juntos. O sucesso do time é reflexo direto do seu empenho e visão estratégica. Em 2025, a palavra Inspiração te acompanhará. Que você continue a iluminar nosso caminho com sua visão e nos inspire a alcançar novas alturas!",
-      "Daiane": "Daiane, sua força e dedicação durante todo o ano foram essenciais para nosso sucesso. O time é mais forte graças ao seu empenho. Em 2025, a palavra que define sua jornada é Crescimento. Que você continue a se desenvolver e a alcançar novas conquistas a cada dia!",
-      "Camila": "Camila, sua presença e energia tornaram o nosso ano mais leve e produtivo. O sucesso do nosso time é muito devido ao seu esforço. Que 2025 seja um ano de Equilíbrio. Que você consiga balancear com sabedoria os desafios e as vitórias, mantendo a harmonia em tudo o que faz.",
-      "Marcos": "Marcos, sua contribuição foi fundamental para o sucesso do nosso time. O nosso êxito é resultado do seu esforço. Em 2025, a palavra que vai definir sua jornada é Conquista. Que você tenha um ano cheio de vitórias e realizações!",
-      "Luan": "Luan, sua persistência e dedicação ao trabalho sempre foram inspiradoras. O sucesso do nosso time é uma conquista compartilhada, em grande parte, por você. Em 2025, a palavra Desafio vai te acompanhar. Que você enfrente cada obstáculo com coragem e transforme cada desafio em uma oportunidade de crescimento!",
-      "Marister": "Marister, a sua dedicação não passa despercebida e é uma grande inspiração para todos. O sucesso do nosso time deve muito ao seu esforço. A palavra para o próximo ano é Superação. Que você conquiste tudo o que se propõe a fazer, sempre se superando!",
-      "Dani": "Dani, sua energia e alegria transformaram nosso ano. O sucesso do time é um reflexo da sua dedicação. Em 2025, a palavra Renovação vai te guiar. Que você se sinta renovada, cheia de energia e pronta para realizar tudo o que deseja!",
-      "Will": "Will, sua dedicação e comprometimento sempre foram exemplares. O sucesso do nosso time é muito devido ao seu empenho. Em 2025, a palavra Motivação te acompanhará. Que você se mantenha inspirado e focado, alcançando grandes feitos!",
-      "Sara": "Sara, sua dedicação e empenho foram fundamentais para o sucesso deste ano. O time é mais forte graças ao seu trabalho. A palavra para o próximo ano é Oportunidade. Que 2025 traga novas chances para você crescer ainda mais!",
-      "Dara": "Dara, seu trabalho foi essencial para atingirmos nossos objetivos. O sucesso do time se deve à sua dedicação. Em 2025, a palavra Prosperidade será seu guia. Que você continue a prosperar e colher os frutos de todo o seu esforço",
-      "Pedro E": "Pedro, sua dedicação e empenho ao longo do ano não passaram despercebidos. O sucesso do time é, em grande parte, seu. Em 2025, a palavra Determinação te acompanhará. Que você continue firme em seus objetivos e conquiste tudo o que deseja!",
-      "Pedro": "Pedro, sua perseverança e trabalho árduo foram essenciais para o nosso sucesso. O êxito do time é fruto da sua entrega. A palavra para 2025 é Autodescoberta. Que você continue a crescer e aprender, explorando novos caminhos e oportunidades!",
-      "Daniel": "Daniel, você sempre se dedicou ao máximo, e isso fez toda a diferença. O sucesso do time é um reflexo do seu esforço. Em 2025, a palavra Transformação guiará seu ano. Que você se reinvente e atinja novas alturas em todas as áreas da sua vida!",
-      "Larissa": "Larissa, sua energia positiva e compromisso foram inspiradores. O sucesso do nosso time também é graças a você. A palavra para 2025 é Harmonia. Que você encontre equilíbrio em todas as áreas da sua vida e siga em frente com paz e confiança",
-      "Lucas": "Lucas, sua dedicação e esforço contribuíram muito para o sucesso do nosso time. O êxito do time é resultado do seu trabalho árduo. Em 2025, a palavra Coragem será seu guia. Que você tenha coragem para enfrentar os desafios e alcançar novos feitos!",
-      "Giovani": "Giovani, sua determinação e trabalho árduo foram essenciais. O sucesso do time é um reflexo direto da sua contribuição. Em 2025, a palavra Foco será seu alicerce. Que você mantenha sua visão clara e não perca de vista seus objetivos!",
-      "Bryan": "Bryan, sua resiliência e força foram fundamentais neste ano. O sucesso do nosso time é, sem dúvida, graças a você. Em 2025, a palavra Resiliência te acompanhará. Que você continue a se fortalecer e a superar todos os obstáculos que surgirem em seu caminho!",
-      "Darci": "Darci, sua sabedoria e paciência foram inspirações para todos. O sucesso do nosso time é um reflexo da sua contribuição. A palavra para 2025 é Sabedoria. Que você continue a fazer escolhas sábias e a orientar os outros com seu exemplo!",
-      "Neusa": "Neusa, sua dedicação e empenho foram chave para nossas conquistas. O sucesso do time é em grande parte devido a você. Em 2025, a palavra Crescimento será sua guia. Que você continue a se desenvolver em todos os aspectos da sua vida!",
-      "Helton": "Helton, sua determinação e talento foram essenciais para o nosso progresso. O sucesso do time é um reflexo do seu esforço. Em 2025, a palavra Inspiração te acompanhará. Que você continue a ser uma fonte de inspiração para todos ao seu redor!",
-      "Sirlei": "Sirlei, sua paciência e comprometimento foram um exemplo para todos. O sucesso do time também é graças à sua dedicação. Em 2025, a palavra Paciência será sua aliada. Que você continue a alcançar seus objetivos com calma e persistência!",
-      "Patrícia": "Patrícia, seu empenho e dedicação contribuíram muito para o sucesso do nosso time. O êxito do time é fruto da sua entrega. A palavra para 2025 é Visão. Que você continue a enxergar as melhores oportunidades e a guiá-las com sabedoria!",
-      "Jets": "Jets, sua energia e motivação sempre foram contagiantes. O sucesso do time é, em grande parte, devido ao seu esforço. Em 2025, a palavra Determinação será sua guia. Que você continue firme na busca por seus objetivos, alcançando grandes conquistas!",
-      "Duda": "Duda, sua alegria e dedicação fizeram toda a diferença neste ano. O sucesso do time é resultado do seu trabalho. A palavra para 2025 é Aventura. Que você se aventure em novas experiências e cresça com cada desafio!",
-      "Karen": "Karen, sua dedicação e trabalho foram essenciais para todos nós. O sucesso do nosso time é fruto da sua contribuição. Em 2025, a palavra Fé te guiará. Que você continue acreditando em seus sonhos e conquistas, sempre com confiança no futuro!",
-      "Jessika": "Jessika, sua força e empenho são inspiradores. O sucesso do time é reflexo direto da sua contribuição. A palavra para 2025 é Empoderamento. Que você continue a se fortalecer e a conquistar tudo o que deseja!",
-      "Jeh": "Jeh, sua energia e trabalho sempre foram de grande valor para todos. O sucesso do time é em grande parte graças a você. Em 2025, a palavra Liberdade será sua guia. Que você se sinta livre para seguir seus sonhos e realizar suas metas!",
-      "Sueli": "Sueli, sua dedicação ao longo do ano foi inspiradora. O sucesso do time é um reflexo do seu esforço. Em 2025, a palavra Renascimento guiará sua jornada. Que você se renove a cada dia e continue crescendo, alcançando novos objetivos!",
-      "David": "David, sua entrega e esforço foram essenciais para nosso sucesso. O sucesso do time não teria sido possível sem sua dedicação. Em 2025, a palavra Sucesso será sua companheira. Que você continue a trilhar o caminho da vitória e da realização!",
+      "Solange": "<strong>Solange</strong>, sua visão, dedicação e liderança foram pilares fundamentais para o sucesso que alcançamos este ano. Não há palavras suficientes para agradecer pela inspiração e esforço que você sempre coloca em tudo o que faz. O sucesso do nosso time é, sem dúvida, um reflexo da sua paixão e compromisso. Em 2025, a palavra Transformação será sua guia. Que você continue a nos inspirar a quebrar barreiras e a transformar desafios em grandes conquistas!",
+      "Vanderlei": "<strong>Vanderlei</strong>, sua habilidade de liderar com equilíbrio, sabedoria e empatia fez toda a diferença em nosso ano. Você não apenas orientou o time com excelência, mas também foi o grande responsável pelo clima positivo e pela motivação constante que vivemos juntos. O sucesso do time é reflexo direto do seu empenho e visão estratégica. Em 2025, a palavra Inspiração te acompanhará. Que você continue a iluminar nosso caminho com sua visão e nos inspire a alcançar novas alturas!",
+      "Daiane": "<strong>Daiane</strong>, sua força e dedicação durante todo o ano foram essenciais para nosso sucesso. O time é mais forte graças ao seu empenho. Em 2025, a palavra que define sua jornada é <strong>Crescimento</strong>. Que você continue a se desenvolver e a alcançar novas conquistas a cada dia!",
+      "Camila": "<strong>Camila</strong>, sua presença e energia tornaram o nosso ano mais leve e produtivo. O sucesso do nosso time é muito devido ao seu esforço. Que 2025 seja um ano de <strong>Equilíbrio</strong>. Que você consiga balancear com sabedoria os desafios e as vitórias, mantendo a harmonia em tudo o que faz.",
+      "Marcos": "<strong>Marcos</strong>, sua contribuição foi fundamental para o sucesso do nosso time. O nosso êxito é resultado do seu esforço. Em 2025, a palavra que vai definir sua jornada é <strong>Conquista</strong>. Que você tenha um ano cheio de vitórias e realizações!",
+      "Luan": "<strong>Luan</strong>, sua persistência e dedicação ao trabalho sempre foram inspiradoras. O sucesso do nosso time é uma conquista compartilhada, em grande parte, por você. Em 2025, a palavra <strong>Desafio</strong> vai te acompanhar. Que você enfrente cada obstáculo com coragem e transforme cada desafio em uma oportunidade de crescimento!",
+      "Marister": "<strong>Marister</strong>, a sua dedicação não passa despercebida e é uma grande inspiração para todos. O sucesso do nosso time deve muito ao seu esforço. A palavra para o próximo ano é <strong>Superação</strong>. Que você conquiste tudo o que se propõe a fazer, sempre se superando!",
+      "Dani": "<strong>Dani</strong>, sua energia e alegria transformaram nosso ano. O sucesso do time é um reflexo da sua dedicação. Em 2025, a palavra <strong>Renovação</strong> vai te guiar. Que você se sinta renovada, cheia de energia e pronta para realizar tudo o que deseja!",
+      "Will": "<strong>Will</strong>, sua dedicação e comprometimento sempre foram exemplares. O sucesso do nosso time é muito devido ao seu empenho. Em 2025, a palavra <strong>Motivação</strong> te acompanhará. Que você se mantenha inspirado e focado, alcançando grandes feitos!",
+      "Sara": "<strong>Sara</strong>, sua dedicação e empenho foram fundamentais para o sucesso deste ano. O time é mais forte graças ao seu trabalho. A palavra para o próximo ano é <strong>Oportunidade</strong>. Que 2025 traga novas chances para você crescer ainda mais!",
+      "Dara": "<strong>Dara</strong>, seu trabalho foi essencial para atingirmos nossos objetivos. O sucesso do time se deve à sua dedicação. Em 2025, a palavra <strong>Prosperidade</strong> será seu guia. Que você continue a prosperar e colher os frutos de todo o seu esforço",
+      "Pedro E": "<strong>Pedro</strong>, sua dedicação e empenho ao longo do ano não passaram despercebidos. O sucesso do time é, em grande parte, seu. Em 2025, a palavra <strong>Determinação</strong> te acompanhará. Que você continue firme em seus objetivos e conquiste tudo o que deseja!",
+      "Pedro": "<strong>Pedro</strong>, sua perseverança e trabalho árduo foram essenciais para o nosso sucesso. O êxito do time é fruto da sua entrega. A palavra para 2025 é <strong>Autodescoberta</strong>. Que você continue a crescer e aprender, explorando novos caminhos e oportunidades!",
+      "Daniel": "<strong>Daniel</strong>, você sempre se dedicou ao máximo, e isso fez toda a diferença. O sucesso do time é um reflexo do seu esforço. Em 2025, a palavra <strong>Transformação</strong> guiará seu ano. Que você se reinvente e atinja novas alturas em todas as áreas da sua vida!",
+      "Larissa": "<strong>Larissa</strong>, sua energia positiva e compromisso foram inspiradores. O sucesso do nosso time também é graças a você. A palavra para 2025 é <strong>Harmonia</strong>. Que você encontre equilíbrio em todas as áreas da sua vida e siga em frente com paz e confiança",
+      "Lucas": "<strong>Lucas</strong>, sua dedicação e esforço contribuíram muito para o sucesso do nosso time. O êxito do time é resultado do seu trabalho árduo. Em 2025, a palavra <strong>Coragem</strong> será seu guia. Que você tenha coragem para enfrentar os desafios e alcançar novos feitos!",
+      "Giovani": "<strong>Giovani</strong>, sua determinação e trabalho árduo foram essenciais. O sucesso do time é um reflexo direto da sua contribuição. Em 2025, a palavra <strong>Foco</strong> será seu alicerce. Que você mantenha sua visão clara e não perca de vista seus objetivos!",
+      "Bryan": "<strong>Bryan</strong>, sua resiliência e força foram fundamentais neste ano. O sucesso do nosso time é, sem dúvida, graças a você. Em 2025, a palavra <strong>Resiliência</strong> te acompanhará. Que você continue a se fortalecer e a superar todos os obstáculos que surgirem em seu caminho!",
+      "Darci": "<strong>Darci</strong>, sua sabedoria e paciência foram inspirações para todos. O sucesso do nosso time é um reflexo da sua contribuição. A palavra para 2025 é <strong>Sabedoria</strong>. Que você continue a fazer escolhas sábias e a orientar os outros com seu exemplo!",
+      "Neusa": "<strong>Neusa</strong>, sua dedicação e empenho foram chave para nossas conquistas. O sucesso do time é em grande parte devido a você. Em 2025, a palavra <strong>Crescimento</strong> será sua guia. Que você continue a se desenvolver em todos os aspectos da sua vida!",
+      "Helton": "<strong>Helton</strong>, sua determinação e talento foram essenciais para o nosso progresso. O sucesso do time é um reflexo do seu esforço. Em 2025, a palavra <strong>Inspiração</strong> te acompanhará. Que você continue a ser uma fonte de inspiração para todos ao seu redor!",
+      "Sirlei": "<strong>Sirlei</strong>, sua paciência e comprometimento foram um exemplo para todos. O sucesso do time também é graças à sua dedicação. Em 2025, a palavra <strong>Paciência</strong> será sua aliada. Que você continue a alcançar seus objetivos com calma e persistência!",
+      "Patrícia": "<strong>Patrícia</strong>, seu empenho e dedicação contribuíram muito para o sucesso do nosso time. O êxito do time é fruto da sua entrega. A palavra para 2025 é <strong>Visã</strong>o. Que você continue a enxergar as melhores oportunidades e a guiá-las com sabedoria!",
+      "Jets": "<strong>Jets</strong>, sua energia e motivação sempre foram contagiantes. O sucesso do time é, em grande parte, devido ao seu esforço. Em 2025, a palavra <strong>Determinação</strong> será sua guia. Que você continue firme na busca por seus objetivos, alcançando grandes conquistas!",
+      "Duda": "<strong>Duda</strong>, sua alegria e dedicação fizeram toda a diferença neste ano. O sucesso do time é resultado do seu trabalho. A palavra para 2025 é <strong>Aventura</strong>. Que você se aventure em novas experiências e cresça com cada desafio!",
+      "Karen": "<strong>Karen</strong>, sua dedicação e trabalho foram essenciais para todos nós. O sucesso do nosso time é fruto da sua contribuição. Em 2025, a palavra <strong>Fé</strong> te guiará. Que você continue acreditando em seus sonhos e conquistas, sempre com confiança no futuro!",
+      "Jessika": "<strong>Jessika</strong>, sua força e empenho são inspiradores. O sucesso do time é reflexo direto da sua contribuição. A palavra para 2025 é <strong>Empoderamento</strong>. Que você continue a se fortalecer e a conquistar tudo o que deseja!",
+      "Jeh": "<strong>Jeh</strong>, sua energia e trabalho sempre foram de grande valor para todos. O sucesso do time é em grande parte graças a você. Em 2025, a palavra <strong>Liberdade</strong> será sua guia. Que você se sinta livre para seguir seus sonhos e realizar suas metas!",
+      "Sueli": "<strong>Sueli</strong>, sua dedicação ao longo do ano foi inspiradora. O sucesso do time é um reflexo do seu esforço. Em 2025, a palavra <strong>Renascimento</strong> guiará sua jornada. Que você se renove a cada dia e continue crescendo, alcançando novos objetivos!",
+      "David": "<strong>David</strong>, sua entrega e esforço foram essenciais para nosso sucesso. O sucesso do time não teria sido possível sem sua dedicação. Em 2025, a palavra <strong>Sucesso</strong> será sua companheira. Que você continue a trilhar o caminho da vitória e da realização!",
+      // Adicione as outras mensagens aqui
+    };
+
+    const employeePhotos = {
+      "Solange": "solange.jpg",
+      "Vanderlei": "vanderlei.jpg",
+      "Daiane": "daiane.jpg",
+      // Adicione as fotos de outros funcionários aqui
     };
 
     function generateCard() {
@@ -244,10 +261,13 @@
       const nameSection = document.getElementById('name-section');
       const cardContent = document.getElementById('card-content');
       const fromName = document.getElementById('from-name');
+      const messageElement = document.querySelector(".message");
+      const employeePhoto = document.getElementById('employee-photo');
 
       if (nameInput && messages[nameInput]) {
         fromName.innerHTML = `<strong>Para:</strong> ${nameInput}`;
-        document.querySelector(".message").innerHTML = messages[nameInput];
+        messageElement.innerHTML = messages[nameInput];
+        employeePhoto.src = employeePhotos[nameInput];
         nameSection.style.display = 'none';
         cardContent.style.display = 'block';
       } else {
